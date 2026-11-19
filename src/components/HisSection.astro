@@ -1,0 +1,145 @@
+---
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { his } from '../data/content';
+---
+
+<section id="his" class="scroll-mt-24 py-20 sm:py-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Bloque 1 · Sistema de información"
+      title="¿Qué es el HIS MINSA?"
+      description="El sistema de información de consulta ambulatoria del Ministerio de Salud y su instrumento de recojo de datos."
+    />
+
+    <div class="mt-14 grid gap-6 lg:grid-cols-5">
+      <article
+        class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 lg:col-span-3 dark:border-night-700 dark:bg-night-800"
+      >
+        <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand-500 to-accent-500" aria-hidden="true"></div>
+        <div class="flex items-center gap-3">
+          <span class="grid size-11 place-items-center rounded-2xl bg-brand-500/15 text-brand-600 dark:text-brand-300">
+            <Icon name="database" class="size-6" />
+          </span>
+          <div>
+            <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white">{his.name}</h3>
+            <p class="text-xs tracking-wide text-slate-500 uppercase dark:text-slate-400">{his.acronym}</p>
+          </div>
+        </div>
+        <p class="mt-5 leading-relaxed text-slate-600 dark:text-slate-300">{his.definition}</p>
+
+        <h4 class="mt-8 text-sm font-semibold tracking-widest text-slate-500 uppercase dark:text-slate-400">
+          ¿Para qué sirve?
+        </h4>
+        <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+          {his.purposes.map((purpose) => (
+            <li
+              class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 transition-colors hover:border-brand-400/60 dark:border-night-700 dark:bg-night-900/60"
+            >
+              <span class="mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg bg-accent-500/15 text-accent-500 dark:text-accent-300">
+                <Icon name={purpose.icon} class="size-4" />
+              </span>
+              <div>
+                <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">{purpose.title}</p>
+                <p class="mt-0.5 text-xs leading-relaxed text-slate-500 dark:text-slate-400">{purpose.detail}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </article>
+
+      <article
+        class="rounded-3xl border border-slate-200 bg-white p-8 lg:col-span-2 dark:border-night-700 dark:bg-night-800"
+      >
+        <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white">Ámbito de aplicación</h3>
+        <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+          La guía es de cumplimiento para todos los Establecimientos, Microredes, Redes, Gerencias y Direcciones
+          Regionales de Salud a nivel nacional.
+        </p>
+        <ol class="mt-6 space-y-4">
+          {his.scope.map((item, i) => (
+            <li class="flex gap-4">
+              <span
+                class="font-display grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-brand-500 to-accent-500 text-sm font-bold text-white"
+              >
+                {i + 1}
+              </span>
+              <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">{item}</p>
+            </li>
+          ))}
+        </ol>
+      </article>
+    </div>
+
+    <div class="tabs-root mt-10">
+      <div
+        role="tablist"
+        aria-label="Escenarios de registro"
+        class="flex flex-wrap gap-1 rounded-2xl border border-slate-200 bg-slate-100/80 p-1.5 dark:border-night-700 dark:bg-night-800/80"
+      >
+        {his.scenarios.map((scenario, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${scenario.id}`}
+            aria-controls={`panel-${scenario.id}`}
+            aria-selected={i === 0}
+            data-tab-btn={scenario.id}
+            class:list={[
+              'flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all',
+              i === 0
+                ? 'bg-white text-brand-700 shadow-sm dark:bg-night-700 dark:text-brand-300'
+                : 'text-slate-600 hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-300',
+            ]}
+          >
+            {scenario.title}
+          </button>
+        ))}
+      </div>
+
+      <div class="mt-6">
+        {his.scenarios.map((scenario, i) => (
+          <div
+            role="tabpanel"
+            id={`panel-${scenario.id}`}
+            aria-labelledby={`tab-${scenario.id}`}
+            data-tab-panel={scenario.id}
+            class:list={['grid gap-6 md:grid-cols-[auto,1fr] md:items-start', i === 0 ? '' : 'hidden']}
+          >
+            <span
+              class="grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 text-white shadow-lg shadow-brand-500/25"
+            >
+              <Icon name={scenario.icon} class="size-7" />
+            </span>
+            <div class="rounded-3xl border border-slate-200 bg-white p-8 dark:border-night-700 dark:bg-night-800">
+              <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white">{scenario.title}</h3>
+              <p class="mt-3 leading-relaxed text-slate-600 dark:text-slate-300">{scenario.detail}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.tabs-root').forEach((root) => {
+    const buttons = root.querySelectorAll<HTMLButtonElement>('[data-tab-btn]');
+    const panels = root.querySelectorAll<HTMLElement>('[data-tab-panel]');
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const id = button.dataset.tabBtn;
+        buttons.forEach((b) => {
+          const active = b === button;
+          b.setAttribute('aria-selected', String(active));
+          b.classList.toggle('bg-white', active);
+          b.classList.toggle('text-brand-700', active);
+          b.classList.toggle('shadow-sm', active);
+          b.classList.toggle('dark:bg-night-700', active);
+          b.classList.toggle('dark:text-brand-300', active);
+        });
+        panels.forEach((panel) => panel.classList.toggle('hidden', panel.dataset.tabPanel !== id));
+      });
+    });
+  });
+</script>

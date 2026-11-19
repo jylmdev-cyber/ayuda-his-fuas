@@ -1,0 +1,83 @@
+---
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { base, comparativa, puntosContacto } from '../data/content';
+---
+
+<section
+  id="comparativa"
+  class="scroll-mt-24 border-y border-slate-200 bg-white py-20 sm:py-24 dark:border-night-700 dark:bg-night-900"
+>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Dos instrumentos, un solo circuito"
+      title="Hoja HIS vs FUA SIS"
+      description="Un diagnóstico CIE-10 no es un procedimiento CPMS ni un código prestacional: tampoco la Hoja HIS es el FUA. Compare propósito, estructura y reglas de cada instrumento."
+    />
+
+    <div class="mt-12 overflow-x-auto">
+      <table class="w-full min-w-[720px] border-separate border-spacing-0 text-left text-sm">
+        <thead>
+          <tr>
+            <th class="w-40 rounded-tl-2xl border border-slate-200 bg-slate-100 px-4 py-3 text-xs font-bold tracking-widest text-slate-500 uppercase dark:border-night-600 dark:bg-night-800 dark:text-slate-400">
+              Aspecto
+            </th>
+            <th class="border border-slate-200 bg-brand-500/10 px-4 py-3 dark:border-night-600">
+              <span class="font-display flex items-center gap-2 text-base font-bold text-brand-700 dark:text-brand-300">
+                <Icon name="clipboard" class="size-4" />
+                Hoja HIS
+              </span>
+            </th>
+            <th class="rounded-tr-2xl border border-slate-200 bg-accent-500/10 px-4 py-3 dark:border-night-600">
+              <span class="font-display flex items-center gap-2 text-base font-bold text-accent-700 dark:text-accent-300">
+                <Icon name="file" class="size-4" />
+                FUA SIS
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {comparativa.map((fila, i) => (
+            <tr>
+              <th
+                scope="row"
+                class:list={[
+                  'border border-l-slate-200 px-4 py-3 align-top text-xs font-bold text-slate-700 dark:border-night-600 dark:text-slate-200',
+                  i === comparativa.length - 1 ? 'rounded-bl-2xl' : '',
+                  'border-slate-200 bg-slate-50 dark:bg-night-800',
+                ]}
+              >
+                {fila.aspecto}
+              </th>
+              <td class="border border-slate-200 px-4 py-3 align-top leading-relaxed text-slate-600 dark:border-night-600 dark:text-slate-300">
+                {fila.his}
+              </td>
+              <td class="border border-slate-200 px-4 py-3 align-top leading-relaxed text-slate-600 dark:border-night-600 dark:text-slate-300">
+                {fila.fua}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-10 grid gap-4 md:grid-cols-2">
+      {puntosContacto.map((punto) => (
+        <p
+          class="flex gap-3 rounded-2xl border border-brand-500/30 bg-brand-500/10 px-5 py-4 text-sm leading-relaxed text-slate-700 dark:text-slate-200"
+        >
+          <Icon name="link" class="mt-0.5 size-4 shrink-0 text-brand-600 dark:text-brand-300" />
+          {punto}
+        </p>
+      ))}
+    </div>
+
+    <p class="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
+      ¿Términos desconocidos? Consulte el{' '}
+      <a href={`${base}glosario/`} class="font-semibold text-brand-700 hover:underline dark:text-brand-300">
+        glosario del sistema de información
+      </a>
+      .
+    </p>
+  </div>
+</section>

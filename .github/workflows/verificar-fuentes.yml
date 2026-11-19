@@ -1,0 +1,65 @@
+name: Verificar fuentes oficiales de catálogos
+
+on:
+  schedule:
+    # Primer día de cada mes, 06:00 UTC
+    - cron: '0 6 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install poppler-utils (pdftotext)
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+
+      - name: Reimportar catálogos oficiales
+        run: npm run import:catalogos
+
+      - name: Resumen de conteos
+        run: cat public/data/catalogos-meta.json >> $GITHUB_STEP_SUMMARY
+
+      - name: Detectar cambios
+        id: diff
+        run: |
+          if git diff --quiet -- public/data; then
+            echo "cambios=false" >> "$GITHUB_OUTPUT"
+            echo "Sin cambios respecto a los catálogos publicados." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "cambios=true" >> "$GITHUB_OUTPUT"
+            echo "Las fuentes oficiales cambiaron: se abre un PR con los catálogos actualizados." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Crear rama y PR con la actualización
+        if: steps.diff.outputs.cambios == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          RAMA="actualizacion-catalogos-$(date +%Y%m%d-%H%M)"
+          git config user.name "catalogos-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$RAMA"
+          git add public/data
+          git commit -m "Actualización de catálogos oficiales CIE-10/CPMS detectada por verificación periódica"
+          git push origin "$RAMA"
+          gh pr create \
+            --title "Actualización de catálogos oficiales (CIE-10 / CPMS)" \
+            --body "El workflow mensual detectó cambios en las fuentes oficiales (REUNIS / RM 447-2024 / RM 550-2023). Revisar el diff de public/data antes de fusionar; al fusionar, el sitio se redespliega con los catálogos actualizados." \
+            --base main \
+            --head "$RAMA"

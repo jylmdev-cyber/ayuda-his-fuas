@@ -1,0 +1,126 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import Metrics from '../components/Metrics.astro';
+import HisSection from '../components/HisSection.astro';
+import HojaSection from '../components/HojaSection.astro';
+import ItemExplorer from '../components/ItemExplorer.astro';
+import CodeTables from '../components/CodeTables.astro';
+import FuaSection from '../components/FuaSection.astro';
+import ComparativaSection from '../components/ComparativaSection.astro';
+import CursoVidaSection from '../components/CursoVidaSection.astro';
+import AuditoriaSection from '../components/AuditoriaSection.astro';
+import Figures from '../components/Figures.astro';
+import Footer from '../components/Footer.astro';
+import { base, site } from '../data/content';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebSite', name: site.title, url: base, inLanguage: 'es-PE', description: site.description },
+    {
+      '@type': 'LearningResource',
+      name: site.longTitle,
+      description: site.description,
+      inLanguage: 'es-PE',
+      educationalLevel: 'Formación profesional en salud',
+      about: ['HIS MINSA', 'FUA SIS', 'CIE-10', 'CPMS', 'Seguro Integral de Salud'],
+    },
+    {
+      '@type': 'Dataset',
+      name: 'Catálogo CIE-10 MINSA (formato compacto)',
+      description: 'Catálogo oficial CIE-10 MINSA (REUNIS, VOLUMEN VIGENTE) con control de vigencia según RM 447-2024-MINSA.',
+      creator: { '@type': 'Organization', name: site.org },
+      inLanguage: 'es-PE',
+      distribution: { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: `${base}data/cie10.json` },
+    },
+    {
+      '@type': 'Dataset',
+      name: 'Catálogo CPMS (formato compacto)',
+      description: 'Catálogo de Procedimientos Médicos y Sanitarios del Sector Salud, Anexo 1 de la RM 550-2023-MINSA.',
+      creator: { '@type': 'Organization', name: site.org },
+      inLanguage: 'es-PE',
+      distribution: { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: `${base}data/cpms.json` },
+    },
+  ],
+};
+---
+
+<Layout title={`${site.longTitle} | Guía interactiva`}>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <a
+    href="#contenido"
+    class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[60] focus:rounded-lg focus:bg-brand-600 focus:px-4 focus:py-2 focus:text-sm focus:text-white"
+  >
+    Saltar al contenido
+  </a>
+  <Navbar />
+  <main id="contenido">
+    <Hero />
+    <Metrics />
+    <HisSection />
+    <HojaSection />
+    <ItemExplorer />
+    <CodeTables />
+    <FuaSection />
+    <ComparativaSection />
+    <CursoVidaSection />
+    <AuditoriaSection />
+    <Figures />
+    <section class="py-16 sm:py-20">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div
+          class="relative overflow-hidden rounded-3xl border border-brand-500/30 bg-gradient-to-br from-brand-500/10 via-white to-accent-500/10 p-10 text-center sm:p-14 dark:from-brand-500/15 dark:via-night-800 dark:to-accent-500/10"
+        >
+          <span class="mx-auto grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 text-white shadow-lg shadow-brand-500/30">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-7" aria-hidden="true">
+              <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" />
+              <path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z" />
+              <path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
+            </svg>
+          </span>
+          <h2 class="font-display mt-6 text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">
+            ¿Listo para practicar el llenado?
+          </h2>
+          <p class="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+            El simulador aplica en tiempo real las reglas del documento: turno único, formatos de fecha y documento,
+            precisión de 0.1 en las medidas, sexo en blanco en APP/AAA, financiador y codificación CIE-10. Obtenga el
+            veredicto del control de calidad antes de digitar.
+          </p>
+          <a
+            href={`${base}simulador/`}
+            class="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-600 to-accent-500 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/30 transition-all hover:-translate-y-0.5 hover:shadow-xl"
+          >
+            Abrir el simulador de la Hoja HIS
+          </a>
+          <a
+            href={`${base}catalogos/`}
+            class="mt-8 inline-flex items-center gap-2 rounded-xl border border-slate-300 px-7 py-3 text-sm font-semibold text-slate-700 transition-colors hover:border-brand-400 hover:text-brand-700 dark:border-night-600 dark:text-slate-200 dark:hover:text-brand-300"
+          >
+            Biblioteca CIE-10 y CPMS
+          </a>
+          <a
+            href={`${base}asistente/`}
+            class="mt-8 inline-flex items-center gap-2 rounded-xl border border-brand-500/50 px-7 py-3 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-500/10 dark:text-brand-300"
+          >
+            Asistente de código prestacional
+          </a>
+          <a
+            href={`${base}estudio/`}
+            class="mt-8 inline-flex items-center gap-2 rounded-xl border border-accent-500/50 px-7 py-3 text-sm font-semibold text-accent-600 transition-colors hover:bg-accent-500/10 dark:text-accent-300"
+          >
+            Modo estudio: flashcards y quiz
+          </a>
+          <a
+            href={`${base}casos/`}
+            class="mt-8 inline-flex items-center gap-2 rounded-xl border border-rose-500/50 px-7 py-3 text-sm font-semibold text-rose-600 transition-colors hover:bg-rose-500/10 dark:text-rose-300"
+          >
+            Casos de auditoría
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>

@@ -1,0 +1,17 @@
+{
+  "generado": "2026-11-19",
+  "fuentes": [
+    "REUNIS – CIE-10 MINSA (Excel, VOLUMEN VIGENTE): https://www.minsa.gob.pe/reunis/index.asp?op=3",
+    "RM 447-2024-MINSA Anexo 1 (uso) y Anexo 2 (cese de uso)",
+    "CPMS Anexo 1 – RM 550-2023-MINSA"
+  ],
+  "conteos": {
+    "cie10": 15057,
+    "cie10Vigentes": 15037,
+    "cie10Cesados": 20,
+    "cie10Adicion": 0,
+    "rm447Cese": 20,
+    "rm447Adicion": 0,
+    "cpms": 10815
+  }
+}

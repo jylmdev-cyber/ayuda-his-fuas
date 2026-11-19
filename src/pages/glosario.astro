@@ -1,0 +1,123 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
+import { base, glosario, site } from '../data/content';
+
+const ordenados = [...glosario].sort((a, b) => a.termino.localeCompare(b.termino, 'es'));
+const letras = [...new Set(ordenados.map((g) => g.termino[0].toUpperCase()))];
+const porLetra = (letra: string) => ordenados.filter((g) => g.termino[0].toUpperCase() === letra);
+---
+
+<Layout
+  title={`Glosario del sistema de información | ${site.title}`}
+  description="Glosario de términos del sistema de información en salud peruano: HIS MINSA, Hoja HIS, FUA, IPRESS, RENIPRES, UPSS, CIE-10, CPMS, VALOR LAB y más, con enlaces a cada sección de la guía."
+>
+  <Navbar />
+  <main>
+    <section class="relative overflow-hidden border-b border-slate-200 dark:border-night-700">
+      <div
+        class="pointer-events-none absolute inset-0 bg-[radial-gradient(50rem_24rem_at_70%_-20%,rgba(20,184,166,0.14),transparent)]"
+        aria-hidden="true"
+      ></div>
+      <div class="relative mx-auto max-w-5xl px-4 py-14 sm:px-6 lg:px-8">
+        <a href={base} class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-700 hover:underline dark:text-brand-300">
+          <Icon name="chevron" class="size-3.5 rotate-90" />
+          Volver a la guía
+        </a>
+        <h1 class="font-display mt-4 text-3xl font-extrabold text-slate-900 sm:text-4xl dark:text-white">Glosario</h1>
+        <p class="mt-4 max-w-3xl text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          {ordenados.length} términos del sistema de información en salud, tal como los define el documento técnico y
+          las directivas del SIS. Cada entrada enlaza a la sección de la guía donde se aplica.
+        </p>
+        <div class="relative mt-6 max-w-xl">
+          <Icon name="search" class="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
+          <input
+            id="glo-q"
+            type="search"
+            class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-3 pl-9 text-sm focus:border-brand-400 focus:outline-none dark:border-night-600 dark:bg-night-900 dark:text-slate-100"
+            placeholder="Buscar término o definición…"
+            aria-label="Buscar en el glosario"
+          />
+        </div>
+        <p id="glo-conteo" class="mt-3 text-xs font-semibold text-slate-500 dark:text-slate-400"></p>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+      {letras.map((letra) => (
+        <div data-glo-grupo class="mb-10">
+          <h2
+            class="font-display sticky top-16 z-10 -mx-2 inline-block rounded-lg bg-slate-50/95 px-2 text-2xl font-extrabold text-brand-600 backdrop-blur dark:bg-night-950/95 dark:text-brand-300"
+          >
+            {letra}
+          </h2>
+          <dl class="mt-4 space-y-3">
+            {porLetra(letra).map((entrada) => (
+              <div
+                data-glo
+                data-glo-text={`${entrada.termino} ${entrada.definicion}`.toLowerCase()}
+                class="rounded-2xl border border-slate-200 bg-white p-5 transition-colors hover:border-brand-400/70 dark:border-night-700 dark:bg-night-800"
+              >
+                <dt class="flex flex-wrap items-center gap-3">
+                  <span class="font-display text-base font-bold text-slate-900 dark:text-white">{entrada.termino}</span>
+                  {entrada.ver && (
+                    <a
+                      href={`${base}${entrada.ver}`}
+                      class="inline-flex items-center gap-1 rounded-full bg-brand-500/15 px-2.5 py-0.5 text-[10px] font-bold text-brand-700 hover:bg-brand-500/25 dark:text-brand-300"
+                    >
+                      Ver en la guía
+                      <Icon name="external" class="size-3" />
+                    </a>
+                  )}
+                </dt>
+                <dd class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{entrada.definicion}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      ))}
+      <p
+        id="glo-vacio"
+        class="hidden rounded-2xl border border-dashed border-slate-300 p-10 text-center text-sm text-slate-500 dark:border-night-600 dark:text-slate-400"
+      >
+        Ningún término coincide con la búsqueda.
+      </p>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  const input = document.getElementById('glo-q') as HTMLInputElement | null;
+  const entradas = Array.from(document.querySelectorAll<HTMLElement>('[data-glo]'));
+  const grupos = Array.from(document.querySelectorAll<HTMLElement>('[data-glo-grupo]'));
+  const conteo = document.getElementById('glo-conteo');
+  const vacio = document.getElementById('glo-vacio');
+
+  const normalizar = (valor: string) =>
+    valor
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+  function aplicar() {
+    const consulta = normalizar(input?.value.trim() ?? '');
+    let visibles = 0;
+    entradas.forEach((entrada) => {
+      const mostrar = consulta.length === 0 || normalizar(entrada.dataset.gloText ?? '').includes(consulta);
+      entrada.classList.toggle('hidden', !mostrar);
+      if (mostrar) visibles += 1;
+    });
+    grupos.forEach((grupo) => {
+      const alguno = Array.from(grupo.querySelectorAll('[data-glo]')).some((e) => !e.classList.contains('hidden'));
+      grupo.classList.toggle('hidden', !alguno);
+    });
+    if (conteo) conteo.textContent = `${visibles} de ${entradas.length} términos`;
+    vacio?.classList.toggle('hidden', visibles !== 0);
+  }
+
+  input?.addEventListener('input', aplicar);
+  aplicar();
+</script>

@@ -1,0 +1,262 @@
+---
+import Icon from './Icon.astro';
+import { base, nav, searchIndex, site } from '../data/content';
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/80 backdrop-blur-xl dark:border-night-700/70 dark:bg-night-950/80"
+>
+  <nav class="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8" aria-label="Principal">
+    <a href={`${base}`} class="group flex shrink-0 items-center gap-2.5" aria-label="Inicio">
+      <span
+        class="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 text-white shadow-lg shadow-brand-500/25 transition-transform group-hover:scale-105"
+      >
+        <Icon name="stethoscope" class="size-5" />
+      </span>
+      <span class="hidden flex-col leading-tight sm:flex">
+        <span class="font-display text-sm font-bold text-slate-900 dark:text-white">{site.title}</span>
+        <span class="text-[11px] text-slate-500 dark:text-slate-400">Guía de llenado · {site.year}</span>
+      </span>
+    </a>
+
+    <ul class="hidden items-center gap-1 lg:flex">
+      {nav.map((entry) => (
+        <li>
+          <a
+            href={`#${entry.id}`}
+            data-navlink={entry.id}
+            class="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-brand-500/10 hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-300"
+          >
+            {entry.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="relative ml-auto hidden md:block" id="global-search">
+      <Icon name="search" class="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
+      <input
+        id="search-input"
+        type="search"
+        autocomplete="off"
+        placeholder="Buscar ítems, códigos, campos del FUA…"
+        class="w-64 rounded-xl border border-slate-200 bg-slate-100/70 py-2 pr-3 pl-9 text-sm text-slate-700 transition-all placeholder:text-slate-400 focus:w-80 focus:border-brand-400 focus:bg-white focus:outline-none xl:w-80 xl:focus:w-96 dark:border-night-600 dark:bg-night-800/70 dark:text-slate-200 dark:focus:bg-night-800"
+        aria-label="Buscador global del contenido"
+      />
+      <div
+        id="search-results"
+        class="absolute top-full right-0 left-0 z-50 mt-2 hidden max-h-96 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/10 dark:border-night-600 dark:bg-night-800"
+        role="listbox"
+      ></div>
+    </div>
+
+    <a
+      href={`${base}catalogos/`}
+      class="hidden items-center gap-2 rounded-xl bg-gradient-to-r from-brand-600 to-accent-500 px-4 py-2 text-xs font-bold text-white shadow-md shadow-brand-500/25 transition-transform hover:-translate-y-0.5 md:inline-flex"
+    >
+      <Icon name="book" class="size-3.5" />
+      Catálogos
+    </a>
+    <a
+      href={`${base}simulador/`}
+      class="hidden items-center gap-2 rounded-xl border border-brand-500/50 px-4 py-2 text-xs font-bold text-brand-700 transition-colors hover:bg-brand-500/10 md:inline-flex dark:text-brand-300"
+    >
+      <Icon name="target" class="size-3.5" />
+      Simulador
+    </a>
+    <a
+      href={`${base}asistente/`}
+      class="hidden items-center gap-2 rounded-xl border border-brand-500/50 px-4 py-2 text-xs font-bold text-brand-700 transition-colors hover:bg-brand-500/10 xl:inline-flex dark:text-brand-300"
+    >
+      <Icon name="gauge" class="size-3.5" />
+      Asistente
+    </a>
+    <a
+      href={`${base}estudio/`}
+      class="hidden items-center gap-2 rounded-xl border border-accent-500/50 px-4 py-2 text-xs font-bold text-accent-600 transition-colors hover:bg-accent-500/10 xl:inline-flex dark:text-accent-300"
+    >
+      <Icon name="book" class="size-3.5" />
+      Estudio
+    </a>
+
+    <button
+      id="theme-toggle"
+      type="button"
+      class="ml-auto grid size-9 shrink-0 place-items-center rounded-xl border border-slate-200 text-slate-600 transition-colors hover:border-brand-400 hover:text-brand-600 md:ml-0 dark:border-night-600 dark:text-slate-300 dark:hover:text-brand-300"
+      aria-label="Cambiar tema claro / oscuro"
+    >
+      <Icon name="sun" class="size-4.5 hidden dark:block" />
+      <Icon name="moon" class="size-4.5 dark:hidden" />
+    </button>
+
+    <button
+      id="menu-toggle"
+      type="button"
+      class="grid size-9 shrink-0 place-items-center rounded-xl border border-slate-200 text-slate-600 lg:hidden dark:border-night-600 dark:text-slate-300"
+      aria-label="Abrir menú de navegación"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <Icon name="menu" class="size-5" />
+    </button>
+  </nav>
+
+  <div
+    id="mobile-menu"
+    class="hidden border-t border-slate-200 bg-white px-4 py-3 lg:hidden dark:border-night-700 dark:bg-night-900"
+  >
+    <ul class="grid gap-1 sm:grid-cols-2">
+      {nav.map((entry) => (
+        <li>
+          <a
+            href={`#${entry.id}`}
+            class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-brand-500/10 hover:text-brand-700 dark:text-slate-200 dark:hover:text-brand-300"
+          >
+            {entry.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <a
+      href={`${base}catalogos/`}
+      class="mt-2 flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-600 to-accent-500 px-4 py-2.5 text-sm font-bold text-white lg:hidden"
+    >
+      <Icon name="book" class="size-4" />
+      Biblioteca de catálogos
+    </a>
+    <a
+      href={`${base}simulador/`}
+      class="mt-2 flex items-center gap-2 rounded-xl border border-brand-500/50 px-4 py-2.5 text-sm font-bold text-brand-700 lg:hidden dark:text-brand-300"
+    >
+      <Icon name="target" class="size-4" />
+      Simulador de llenado
+    </a>
+    <a
+      href={`${base}asistente/`}
+      class="mt-2 flex items-center gap-2 rounded-xl border border-brand-500/50 px-4 py-2.5 text-sm font-bold text-brand-700 lg:hidden dark:text-brand-300"
+    >
+      <Icon name="gauge" class="size-4" />
+      Asistente de código prestacional
+    </a>
+    <a
+      href={`${base}estudio/`}
+      class="mt-2 flex items-center gap-2 rounded-xl border border-accent-500/50 px-4 py-2.5 text-sm font-bold text-accent-600 lg:hidden dark:text-accent-300"
+    >
+      <Icon name="book" class="size-4" />
+      Modo estudio
+    </a>
+    <a
+      href={`${base}casos/`}
+      class="mt-2 flex items-center gap-2 rounded-xl border border-rose-500/50 px-4 py-2.5 text-sm font-bold text-rose-600 lg:hidden dark:text-rose-300"
+    >
+      <Icon name="alert" class="size-4" />
+      Casos de auditoría
+    </a>
+    <a
+      href={`${base}glosario/`}
+      class="mt-2 flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-bold text-slate-700 lg:hidden dark:border-night-600 dark:text-slate-200"
+    >
+      <Icon name="book" class="size-4" />
+      Glosario
+    </a>
+  </div>
+</header>
+
+<script define:vars={{ searchIndex }}>
+  const root = document.documentElement;
+
+  const themeToggle = document.getElementById('theme-toggle');
+  themeToggle?.addEventListener('click', () => {
+    const dark = root.classList.toggle('dark');
+    localStorage.setItem('his-fua-theme', dark ? 'dark' : 'light');
+  });
+
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  menuToggle?.addEventListener('click', () => {
+    const open = mobileMenu?.classList.toggle('hidden') === false;
+    menuToggle.setAttribute('aria-expanded', String(open));
+  });
+  mobileMenu?.addEventListener('click', (event) => {
+    if (event.target.closest('a')) mobileMenu.classList.add('hidden');
+  });
+
+  const links = Array.from(document.querySelectorAll('[data-navlink]'));
+  const sections = links
+    .map((link) => document.getElementById(link.dataset.navlink ?? ''))
+    .filter((el) => el !== null);
+
+  const spy = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        links.forEach((link) => {
+          const active = link.dataset.navlink === entry.target.id;
+          link.classList.toggle('bg-brand-500/10', active);
+          link.classList.toggle('text-brand-700', active);
+          link.classList.toggle('dark:text-brand-300', active);
+        });
+      }
+    },
+    { rootMargin: '-40% 0px -55% 0px' },
+  );
+  sections.forEach((section) => spy.observe(section));
+
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  const index = searchIndex;
+
+  const normalize = (value) =>
+    value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+  function renderResults(query) {
+    if (!results) return;
+    const q = normalize(query.trim());
+    if (q.length < 2) {
+      results.classList.add('hidden');
+      results.innerHTML = '';
+      return;
+    }
+    const hits = index
+      .filter((entry) => normalize(entry.title + ' ' + entry.text + ' ' + entry.kind).includes(q))
+      .slice(0, 8);
+
+    if (hits.length === 0) {
+      results.innerHTML = '<p class="px-4 py-3 text-sm text-slate-500">Sin resultados para esta búsqueda.</p>';
+      results.classList.remove('hidden');
+      return;
+    }
+
+    results.innerHTML = hits
+      .map(
+        (hit) => `
+        <a href="${hit.anchor}" class="block border-b border-slate-100 px-4 py-2.5 last:border-0 hover:bg-brand-500/10 dark:border-night-700">
+          <span class="block text-sm font-semibold text-slate-800 dark:text-slate-100">${hit.title}</span>
+          <span class="mt-0.5 block text-[11px] font-medium tracking-wide text-brand-600 uppercase dark:text-brand-400">${hit.kind}</span>
+        </a>`,
+      )
+      .join('');
+    results.classList.remove('hidden');
+  }
+
+  input?.addEventListener('input', () => renderResults(input.value));
+  input?.addEventListener('focus', () => renderResults(input.value));
+  document.addEventListener('click', (event) => {
+    if (!results || !event.target.closest('#global-search')) results.classList.add('hidden');
+  });
+  results?.addEventListener('click', (event) => {
+    const link = event.target.closest('a');
+    if (!link) return;
+    const id = (link.getAttribute('href') || '').replace('#item-', '');
+    if (id && !Number.isNaN(Number(id))) {
+      const target = document.getElementById('item-' + id);
+      target?.setAttribute('open', 'true');
+      target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    results.classList.add('hidden');
+    if (input) input.value = '';
+  });
+</script>

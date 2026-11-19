@@ -1,0 +1,92 @@
+---
+import Icon from './Icon.astro';
+import { site, auditoria, cursoVida, fua } from '../data/content';
+
+const base = import.meta.env.BASE_URL;
+
+const badges = [
+  { label: 'Documento Técnico 2025 · OGTI MINSA', icon: 'clipboard' as const },
+  { label: fua.norma, icon: 'file' as const },
+  { label: auditoria.norma, icon: 'shield' as const },
+];
+---
+
+<section class="relative overflow-hidden" id="inicio">
+  <div
+    class="pointer-events-none absolute inset-0 bg-[radial-gradient(60rem_30rem_at_70%_-10%,rgba(20,184,166,0.18),transparent),radial-gradient(40rem_24rem_at_10%_10%,rgba(14,165,233,0.14),transparent)]"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] [background-size:44px_44px]"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative mx-auto max-w-7xl px-4 pt-16 pb-20 sm:px-6 sm:pt-24 sm:pb-28 lg:px-8">
+    <div class="mx-auto max-w-4xl text-center">
+      <div class="flex flex-wrap items-center justify-center gap-2">
+        {badges.map((badge) => (
+          <span
+            class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-[11px] font-semibold text-slate-600 backdrop-blur dark:border-night-600 dark:bg-night-800/70 dark:text-slate-300"
+          >
+            <Icon name={badge.icon} class="size-3.5 text-brand-500" />
+            {badge.label}
+          </span>
+        ))}
+      </div>
+
+      <h1
+        class="font-display mt-8 text-4xl leading-tight font-extrabold text-slate-900 sm:text-5xl lg:text-6xl dark:text-white"
+      >
+        Registro de actividades de salud
+        <span class="bg-gradient-to-r from-brand-500 via-brand-400 to-accent-400 bg-clip-text text-transparent">
+          HIS MINSA y FUA SIS
+        </span>
+      </h1>
+
+      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+        {site.tagline}. Consulta los 22 ítems de la Hoja HIS, los códigos de financiador y etnia, los 17 campos del
+        FUA, los códigos por curso de vida y la auditoría SIS 2025 en un solo lugar, con buscador y filtros en tiempo
+        real.
+      </p>
+
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <a
+          href="#items"
+          class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/30 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand-500/40"
+        >
+          <Icon name="clipboard" class="size-4" />
+          Explorar los 22 ítems
+        </a>
+        <a
+          href="#fua"
+          class="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white/70 px-6 py-3 text-sm font-semibold text-slate-700 backdrop-blur transition-all hover:-translate-y-0.5 hover:border-brand-400 hover:text-brand-700 dark:border-night-600 dark:bg-night-800/70 dark:text-slate-200 dark:hover:text-brand-300"
+        >
+          <Icon name="file" class="size-4" />
+          Ver el FUA del SIS
+        </a>
+      </div>
+
+      <dl class="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-4">
+        {[
+          { value: '22', label: 'ítems Hoja HIS' },
+          { value: '17', label: 'campos del FUA' },
+          { value: `${cursoVida.codes.length}`, label: 'códigos curso de vida' },
+          { value: '03', label: 'directivas y normas' },
+        ].map((stat) => (
+          <div
+            class="rounded-2xl border border-slate-200/80 bg-white/60 px-4 py-5 backdrop-blur transition-colors hover:border-brand-400/60 dark:border-night-700 dark:bg-night-800/50"
+          >
+            <dt class="order-2 mt-1 block text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400">
+              {stat.label}
+            </dt>
+            <dd class="font-display order-1 text-3xl font-extrabold text-brand-600 dark:text-brand-300">{stat.value}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <p class="mt-8 text-xs text-slate-500 dark:text-slate-500">
+        Fuente: {site.sourceDocument} · {site.org}
+      </p>
+    </div>
+  </div>
+</section>

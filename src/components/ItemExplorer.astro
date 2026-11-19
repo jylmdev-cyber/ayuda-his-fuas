@@ -1,0 +1,226 @@
+---
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { hisItems, itemGroups, patientFields, personalModule, type ItemGroup } from '../data/content';
+
+const groups: { id: ItemGroup | 'todos'; label: string }[] = [
+  { id: 'todos', label: 'Todos' },
+  { id: 'general', label: itemGroups.general },
+  { id: 'paciente', label: itemGroups.paciente },
+  { id: 'atencion', label: itemGroups.atencion },
+];
+
+const groupBadge: Record<ItemGroup, string> = {
+  general: 'bg-accent-500/15 text-accent-600 dark:text-accent-300',
+  paciente: 'bg-brand-500/15 text-brand-700 dark:text-brand-300',
+  atencion: 'bg-amber-500/15 text-amber-700 dark:text-amber-300',
+};
+---
+
+<section id="items" class="scroll-mt-24 py-20 sm:py-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Explorador interactivo"
+      title="Los 22 ítems de la Hoja HIS"
+      description="Busca por nombre, código o palabra clave y filtra por sección. Despliega cada ítem para ver sus reglas de llenado y ejemplos."
+    />
+
+    <div class="mt-12 grid gap-6 lg:grid-cols-[1fr,340px]">
+      <div>
+        <div
+          class="sticky top-20 z-30 rounded-2xl border border-slate-200 bg-white/90 p-4 backdrop-blur-xl dark:border-night-700 dark:bg-night-900/90"
+        >
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div class="relative flex-1">
+              <Icon name="search" class="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
+              <input
+                id="item-search"
+                type="search"
+                placeholder="Ej.: financiador, hemoglobina, CIE-10, turno…"
+                class="w-full rounded-xl border border-slate-200 bg-slate-100/70 py-2.5 pr-3 pl-9 text-sm focus:border-brand-400 focus:bg-white focus:outline-none dark:border-night-600 dark:bg-night-800 dark:focus:bg-night-800"
+                aria-label="Filtrar ítems de la Hoja HIS"
+              />
+            </div>
+            <div class="flex flex-wrap gap-1.5" role="group" aria-label="Filtrar por sección">
+              {groups.map((group, i) => (
+                <button
+                  type="button"
+                  data-group-btn={group.id}
+                  aria-pressed={i === 0}
+                  class:list={[
+                    'rounded-full px-3.5 py-2 text-xs font-semibold transition-all',
+                    i === 0
+                      ? 'bg-brand-600 text-white shadow-sm shadow-brand-500/30'
+                      : 'border border-slate-200 text-slate-600 hover:border-brand-400 hover:text-brand-700 dark:border-night-600 dark:text-slate-300 dark:hover:text-brand-300',
+                  ]}
+                >
+                  {group.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <p id="item-count" class="mt-3 text-xs text-slate-500 dark:text-slate-400" aria-live="polite"></p>
+        </div>
+
+        <ul id="item-list" class="mt-6 space-y-3">
+          {hisItems.map((item) => (
+            <li data-item data-group={item.grupo} data-text={`${item.num} ${item.nombre} ${item.resumen} ${item.reglas.join(' ')} ${item.tags.join(' ')}`.toLowerCase()}>
+              <details
+                id={`item-${item.num}`}
+                class="group rounded-2xl border border-slate-200 bg-white transition-colors open:border-brand-400/70 open:shadow-lg open:shadow-brand-500/5 dark:border-night-700 dark:bg-night-800 dark:open:border-brand-500/50"
+              >
+                <summary
+                  class="flex cursor-pointer items-center gap-4 rounded-2xl px-5 py-4 select-none [&::-webkit-details-marker]:hidden"
+                >
+                  <span
+                    class="font-display grid size-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-brand-600 to-accent-500 text-sm font-bold text-white"
+                  >
+                    {item.num}
+                  </span>
+                  <span class="flex-1">
+                    <span class="block text-sm font-semibold text-slate-900 dark:text-white">{item.nombre}</span>
+                    <span class="mt-0.5 block text-xs text-slate-500 line-clamp-1 dark:text-slate-400">{item.resumen}</span>
+                  </span>
+                  <span class={`hidden rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide uppercase sm:block ${groupBadge[item.grupo]}`}>
+                    {itemGroups[item.grupo]}
+                  </span>
+                  <Icon name="chevron" class="size-4 shrink-0 text-slate-400 transition-transform group-open:rotate-180" />
+                </summary>
+                <div class="border-t border-slate-100 px-5 py-5 dark:border-night-700">
+                  <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">{item.resumen}</p>
+                  <ul class="mt-4 space-y-2">
+                    {item.reglas.map((rule) => (
+                      <li class="flex gap-2.5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                        <Icon name="check" class="mt-1 size-3.5 shrink-0 text-brand-500" />
+                        <span>{rule}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {item.ejemplo && (
+                    <p class="mt-4 rounded-xl bg-slate-100 px-4 py-3 font-mono text-xs text-slate-700 dark:bg-night-900 dark:text-slate-300">
+                      <span class="font-sans font-semibold text-brand-700 dark:text-brand-300">Ejemplo: </span>
+                      {item.ejemplo}
+                    </p>
+                  )}
+                </div>
+              </details>
+            </li>
+          ))}
+        </ul>
+        <p id="item-empty" class="hidden rounded-2xl border border-dashed border-slate-300 p-10 text-center text-sm text-slate-500 dark:border-night-600 dark:text-slate-400">
+          Ningún ítem coincide con la búsqueda. Prueba con otro término o quita los filtros.
+        </p>
+      </div>
+
+      <aside class="space-y-6">
+        <article class="rounded-3xl border border-slate-200 bg-white p-6 dark:border-night-700 dark:bg-night-800">
+          <div class="flex items-center gap-3">
+            <span class="grid size-10 place-items-center rounded-xl bg-brand-500/15 text-brand-600 dark:text-brand-300">
+              <Icon name="users" class="size-5" />
+            </span>
+            <h3 class="font-display text-base font-bold text-slate-900 dark:text-white">Datos específicos del paciente</h3>
+          </div>
+          <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+            Encabezado común de cada fila de atención, previo a los ítems numerados.
+          </p>
+          <ul class="mt-4 space-y-4">
+            {patientFields.map((field) => (
+              <li class="border-l-2 border-brand-400/60 pl-4">
+                <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">{field.nombre}</p>
+                <p class="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">{field.regla}</p>
+              </li>
+            ))}
+          </ul>
+        </article>
+
+        <article class="rounded-3xl border border-slate-200 bg-white p-6 dark:border-night-700 dark:bg-night-800">
+          <div class="flex items-center gap-3">
+            <span class="grid size-10 place-items-center rounded-xl bg-accent-500/15 text-accent-500 dark:text-accent-300">
+              <Icon name="shield" class="size-5" />
+            </span>
+            <h3 class="font-display text-base font-bold text-slate-900 dark:text-white">Módulo "Personal de Salud"</h3>
+          </div>
+          <p class="mt-3 text-xs leading-relaxed text-slate-500 dark:text-slate-400">{personalModule.note}</p>
+          <div class="mt-4 space-y-3">
+            {personalModule.groups.map((group) => (
+              <div class="rounded-2xl bg-slate-100 p-4 dark:bg-night-900/70">
+                <p class="text-xs font-bold tracking-widest text-brand-700 uppercase dark:text-brand-300">{group.title}</p>
+                <ul class="mt-2 flex flex-wrap gap-1.5">
+                  {group.fields.map((field) => (
+                    <li class="rounded-full bg-white px-2.5 py-1 text-[11px] font-medium text-slate-600 dark:bg-night-800 dark:text-slate-300">
+                      {field}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </article>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script>
+  const list = document.getElementById('item-list');
+  const rows = Array.from(list?.querySelectorAll<HTMLLIElement>('[data-item]') ?? []);
+  const search = document.getElementById('item-search') as HTMLInputElement | null;
+  const count = document.getElementById('item-count');
+  const empty = document.getElementById('item-empty');
+  const groupButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-group-btn]'));
+
+  const normalize = (value: string) =>
+    value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+  let activeGroup = 'todos';
+
+  function applyFilters() {
+    const query = normalize(search?.value.trim() ?? '');
+    let visible = 0;
+    rows.forEach((row) => {
+      const matchesGroup = activeGroup === 'todos' || row.dataset.group === activeGroup;
+      const matchesText = query.length === 0 || normalize(row.dataset.text ?? '').includes(query);
+      const show = matchesGroup && matchesText;
+      row.classList.toggle('hidden', !show);
+      if (show) visible += 1;
+    });
+    if (count) {
+      count.textContent =
+        visible === rows.length
+          ? `Mostrando los ${rows.length} ítems de la Hoja HIS.`
+          : `Mostrando ${visible} de ${rows.length} ítems.`;
+    }
+    empty?.classList.toggle('hidden', visible !== 0);
+  }
+
+  search?.addEventListener('input', applyFilters);
+  groupButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      activeGroup = button.dataset.groupBtn ?? 'todos';
+      groupButtons.forEach((b) => {
+        const active = b === button;
+        b.setAttribute('aria-pressed', String(active));
+        b.classList.toggle('bg-brand-600', active);
+        b.classList.toggle('text-white', active);
+        b.classList.toggle('shadow-sm', active);
+        b.classList.toggle('border', !active);
+        b.classList.toggle('border-slate-200', !active);
+        b.classList.toggle('dark:border-night-600', !active);
+      });
+      applyFilters();
+    });
+  });
+  applyFilters();
+
+  const openFromHash = () => {
+    const match = window.location.hash.match(/^#item-(\d+)$/);
+    if (!match) return;
+    const target = document.getElementById(`item-${match[1]}`);
+    if (target instanceof HTMLDetailsElement) target.open = true;
+  };
+  window.addEventListener('hashchange', openFromHash);
+  openFromHash();
+</script>

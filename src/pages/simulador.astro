@@ -1,0 +1,371 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
+import { base, codeTables, hisItems, site } from '../data/content';
+
+const item = (num: number) => hisItems.find((i) => i.num === num);
+const financiador = codeTables.find((t) => t.id === 'financiador');
+const etnias = codeTables.find((t) => t.id === 'etnia');
+
+const inputCls =
+  'w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 transition-colors placeholder:text-slate-400 focus:border-brand-400 focus:outline-none dark:border-night-600 dark:bg-night-900 dark:text-slate-100';
+const labelCls = 'block text-xs font-semibold text-slate-700 dark:text-slate-200';
+const numCls =
+  'font-display mr-2 inline-grid size-5 place-items-center rounded-md bg-brand-500/15 text-[10px] font-bold text-brand-700 dark:text-brand-300';
+const helpCls = 'mt-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400';
+---
+
+<Layout title={`Simulador de llenado de la Hoja HIS | ${site.title}`}>
+  <Navbar />
+  <main>
+    <section class="relative overflow-hidden border-b border-slate-200 dark:border-night-700">
+      <div
+        class="pointer-events-none absolute inset-0 bg-[radial-gradient(50rem_24rem_at_80%_-20%,rgba(20,184,166,0.16),transparent)]"
+        aria-hidden="true"
+      ></div>
+      <div class="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <a
+          href={base}
+          class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-700 hover:underline dark:text-brand-300"
+        >
+          <Icon name="chevron" class="size-3.5 rotate-90" />
+          Volver a la guía
+        </a>
+        <h1 class="font-display mt-4 text-3xl font-extrabold text-slate-900 sm:text-4xl dark:text-white">
+          Simulador de llenado de la Hoja HIS
+        </h1>
+        <p class="mt-4 max-w-3xl text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          Practique el registro de una atención completa: complete los casilleros y el validador aplicará en tiempo
+          real las reglas del documento técnico —turno único, formatos de fecha y documento, precisión de 0.1 en
+          medidas, sexo en blanco en APP/AAA, códigos de financiador y CIE-10— con el veredicto del control de
+          calidad del establecimiento.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <button
+            id="sim-btn-ejemplo"
+            type="button"
+            class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:-translate-y-0.5"
+          >
+            <Icon name="check" class="size-4" />
+            Cargar ejemplo del material
+          </button>
+          <button
+            id="sim-btn-limpiar"
+            type="button"
+            class="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-brand-400 hover:text-brand-700 dark:border-night-600 dark:text-slate-200 dark:hover:text-brand-300"
+          >
+            <Icon name="close" class="size-4" />
+            Limpiar hoja
+          </button>
+          <a
+            href={`${base}casos/`}
+            class="inline-flex items-center gap-2 rounded-xl border border-accent-500/50 px-5 py-2.5 text-sm font-semibold text-accent-600 transition-colors hover:bg-accent-500/10 dark:text-accent-300"
+          >
+            <Icon name="alert" class="size-4" />
+            Auditar casos con errores sembrados
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="grid gap-8 lg:grid-cols-[1fr,360px]">
+        <form id="sim-form" class="space-y-8" novalidate>
+          <fieldset
+            class="rounded-3xl border border-slate-200 bg-white p-6 dark:border-night-700 dark:bg-night-800"
+          >
+            <legend class="px-2 text-sm font-bold text-slate-900 dark:text-white">
+              Datos generales · ítems 1 a 6
+            </legend>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div class="sm:col-span-2 lg:col-span-1">
+                <span class={labelCls}><span class={numCls}>1</span>Turno</span>
+                <div class="mt-2 grid grid-cols-3 gap-2" role="radiogroup" aria-label="Turno de atención">
+                  {['M', 'T', 'N'].map((t) => (
+                    <label
+                      class="cursor-pointer rounded-xl border border-slate-200 px-3 py-2.5 text-center text-sm font-semibold text-slate-600 transition-colors has-checked:border-brand-500 has-checked:bg-brand-500/10 has-checked:text-brand-700 dark:border-night-600 dark:text-slate-300 dark:has-checked:text-brand-300"
+                    >
+                      <input type="radio" name="sim-turno" value={t} class="sr-only" />
+                      {t}
+                    </label>
+                  ))}
+                </div>
+                <p class={helpCls}>Mañana, tarde o noche. Una hoja por turno.</p>
+              </div>
+              <div>
+                <label for="sim-anio" class={labelCls}><span class={numCls}>2</span>Año</label>
+                <input id="sim-anio" name="sim-anio" class={inputCls} inputmode="numeric" maxlength="4" placeholder="2026" />
+                <p class={helpCls}>Cuatro (4) dígitos.</p>
+              </div>
+              <div>
+                <label for="sim-mes" class={labelCls}><span class={numCls}>3</span>Mes</label>
+                <input id="sim-mes" name="sim-mes" class={inputCls} inputmode="numeric" maxlength="2" placeholder="02" />
+                <p class={helpCls}>Dos (2) dígitos.</p>
+              </div>
+              <div class="sm:col-span-2">
+                <label for="sim-eess" class={labelCls}><span class={numCls}>4</span>Establecimiento de salud</label>
+                <input id="sim-eess" name="sim-eess" class={inputCls} placeholder="C.S. Bellavista" />
+                <p class={helpCls}>Código IPRESS activo en RENIPRES.</p>
+              </div>
+              <div>
+                <label for="sim-upss" class={labelCls}><span class={numCls}>5</span>UPSS</label>
+                <input id="sim-upss" name="sim-upss" class={inputCls} placeholder="Medicina General" />
+              </div>
+              <div class="sm:col-span-2 lg:col-span-3">
+                <label for="sim-responsable" class={labelCls}>
+                  <span class={numCls}>6</span>Responsable de la atención
+                </label>
+                <input id="sim-responsable" name="sim-responsable" class={inputCls} placeholder="Nombres y apellidos completos" />
+                <p class={helpCls}>Debe estar registrado previamente en el módulo "Personal de Salud" del HIS MINSA.</p>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset
+            class="rounded-3xl border border-slate-200 bg-white p-6 dark:border-night-700 dark:bg-night-800"
+          >
+            <legend class="px-2 text-sm font-bold text-slate-900 dark:text-white">Datos específicos del paciente</legend>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div class="sm:col-span-2">
+                <label for="sim-paciente" class={labelCls}>Nombres y apellidos del paciente</label>
+                <input id="sim-paciente" name="sim-paciente" class={inputCls} placeholder="Según documento de identidad" />
+              </div>
+              <div>
+                <label for="sim-fecnac" class={labelCls}>Fecha de nacimiento (*)</label>
+                <input id="sim-fecnac" name="sim-fecnac" type="date" class={inputCls} />
+                <p class={helpCls}>Opcional: solo pacientes indocumentados.</p>
+              </div>
+              <div>
+                <label for="sim-fechb" class={labelCls}>Fecha del último resultado de Hb</label>
+                <input id="sim-fechb" name="sim-fechb" type="date" class={inputCls} />
+                <p class={helpCls}>Solo menores de 5 años, adolescentes y gestantes.</p>
+              </div>
+              <div>
+                <label for="sim-fulr" class={labelCls}>Fecha de última regla</label>
+                <input id="sim-fulr" name="sim-fulr" type="date" class={inputCls} />
+                <p class={helpCls}>Solo gestantes; si no se dispone, fecha de la primera ecografía.</p>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset
+            class="rounded-3xl border border-slate-200 bg-white p-6 dark:border-night-700 dark:bg-night-800"
+          >
+            <legend class="px-2 text-sm font-bold text-slate-900 dark:text-white">Datos de la atención · ítems 7 a 22</legend>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div>
+                <label for="sim-tipoact" class={labelCls}>Tipo de actividad</label>
+                <select id="sim-tipoact" name="sim-tipoact" class={inputCls}>
+                  <option value="atencion">Atención de salud</option>
+                  <option value="app">Actividad Preventivo Promocional (APP)</option>
+                  <option value="aaa">Actividad en Animales (AAA)</option>
+                </select>
+              </div>
+              <div>
+                <label for="sim-dia" class={labelCls}><span class={numCls}>7</span>Día</label>
+                <input id="sim-dia" name="sim-dia" class={inputCls} inputmode="numeric" maxlength="2" placeholder="15" />
+              </div>
+              <div>
+                <label for="sim-dni" class={labelCls}><span class={numCls}>8.1</span>Documento de identidad</label>
+                <input id="sim-dni" name="sim-dni" class={inputCls} placeholder="25531200 / Sin documento / CNV" />
+              </div>
+              <div>
+                <label for="sim-hc" class={labelCls}><span class={numCls}>8.2</span>H. Clínica / Ficha / código</label>
+                <input id="sim-hc" name="sim-hc" class={inputCls} placeholder="2670 · 15251342-01 · APP140 · AAA101" />
+              </div>
+              <div>
+                <label for="sim-gest" class={labelCls}><span class={numCls}>8.3</span>Gestante / puérpera</label>
+                <select id="sim-gest" name="sim-gest" class={inputCls}>
+                  <option value="">No aplica</option>
+                  <option value="gestante">Gestante</option>
+                  <option value="puerpera">Puérpera</option>
+                </select>
+              </div>
+              <div>
+                <label for="sim-fin" class={labelCls}><span class={numCls}>9</span>Financiador</label>
+                <select id="sim-fin" name="sim-fin" class={inputCls}>
+                  <option value="">Seleccione…</option>
+                  {financiador?.rows.map((row) => (
+                    <option value={row.code}>
+                      {row.code} — {row.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label for="sim-etnia" class={labelCls}><span class={numCls}>10</span>Pertenencia étnica</label>
+                <select id="sim-etnia" name="sim-etnia" class={inputCls}>
+                  <option value="">Seleccione…</option>
+                  {etnias?.rows.map((row) => (
+                    <option value={row.code}>
+                      {row.code} — {row.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label for="sim-distrito" class={labelCls}><span class={numCls}>11</span>Distrito de procedencia</label>
+                <input id="sim-distrito" name="sim-distrito" class={inputCls} placeholder="Residencia últimos 06 meses" />
+              </div>
+              <div>
+                <label for="sim-cp" class={labelCls}><span class={numCls}>12</span>Centro poblado</label>
+                <input id="sim-cp" name="sim-cp" class={inputCls} placeholder="Opcional" />
+              </div>
+              <div>
+                <label for="sim-edad" class={labelCls}><span class={numCls}>13</span>Edad</label>
+                <div class="flex gap-2">
+                  <input id="sim-edad" name="sim-edad" class={inputCls} inputmode="numeric" placeholder="25" />
+                  <select id="sim-edadud" name="sim-edadud" class={`${inputCls} w-20`} aria-label="Tipo de edad">
+                    <option value="">—</option>
+                    <option value="D">D</option>
+                    <option value="M">M</option>
+                    <option value="A">A</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label for="sim-sexo" class={labelCls}><span class={numCls}>14</span>Sexo</label>
+                <select id="sim-sexo" name="sim-sexo" class={inputCls}>
+                  <option value="">Seleccione…</option>
+                  <option value="M">M — Masculino</option>
+                  <option value="F">F — Femenino</option>
+                  <option value="BLANK">En blanco con línea oblicua</option>
+                </select>
+                <p class={helpCls}>En APP y AAA se deja en blanco.</p>
+              </div>
+              <div>
+                <label for="sim-pc" class={labelCls}><span class={numCls}>15</span>Perímetro cefálico (cm)</label>
+                <input id="sim-pc" name="sim-pc" class={inputCls} inputmode="decimal" placeholder="34.5" />
+              </div>
+              <div>
+                <label for="sim-pab" class={labelCls}><span class={numCls}>15</span>Perímetro abdominal (cm)</label>
+                <input id="sim-pab" name="sim-pab" class={inputCls} inputmode="decimal" placeholder="82.0" />
+              </div>
+              <div>
+                <label for="sim-peso" class={labelCls}><span class={numCls}>16</span>Peso (kg)</label>
+                <input id="sim-peso" name="sim-peso" class={inputCls} inputmode="decimal" placeholder="66.1" />
+              </div>
+              <div>
+                <label for="sim-talla" class={labelCls}><span class={numCls}>16</span>Talla (cm)</label>
+                <input id="sim-talla" name="sim-talla" class={inputCls} inputmode="decimal" placeholder="163.2" />
+              </div>
+              <div>
+                <label for="sim-hb" class={labelCls}><span class={numCls}>16</span>Hemoglobina (g/dL)</label>
+                <input id="sim-hb" name="sim-hb" class={inputCls} inputmode="decimal" placeholder="11.1" />
+              </div>
+              <div>
+                <label for="sim-cond17" class={labelCls}><span class={numCls}>17</span>Establecimiento</label>
+                <select id="sim-cond17" name="sim-cond17" class={inputCls}>
+                  <option value="">Seleccione…</option>
+                  <option value="N">N — Nuevo</option>
+                  <option value="C">C — Continuador</option>
+                  <option value="R">R — Reingreso</option>
+                </select>
+              </div>
+              <div>
+                <label for="sim-cond18" class={labelCls}><span class={numCls}>18</span>Servicio</label>
+                <select id="sim-cond18" name="sim-cond18" class={inputCls}>
+                  <option value="">Seleccione…</option>
+                  <option value="N">N — Nuevo</option>
+                  <option value="C">C — Continuador</option>
+                  <option value="R">R — Reingreso</option>
+                </select>
+              </div>
+              <div class="sm:col-span-2 lg:col-span-3">
+                <label for="sim-dx" class={labelCls}>
+                  <span class={numCls}>19</span>Diagnóstico / motivo de consulta / actividad
+                </label>
+                <input id="sim-dx" name="sim-dx" class={inputCls} placeholder="Sin abreviaturas" />
+              </div>
+              <div>
+                <label for="sim-tipodx" class={labelCls}><span class={numCls}>20</span>Tipo de diagnóstico</label>
+                <select id="sim-tipodx" name="sim-tipodx" class={inputCls}>
+                  <option value="">Seleccione…</option>
+                  <option value="P">P</option>
+                  <option value="D">D</option>
+                  <option value="R">R</option>
+                </select>
+              </div>
+              <div>
+                <label for="sim-lab" class={labelCls}><span class={numCls}>21</span>Valor de Lab</label>
+                <input id="sim-lab" name="sim-lab" class={inputCls} inputmode="numeric" placeholder="Dosis, sesiones, participantes…" />
+              </div>
+              <div>
+                <label for="sim-cie" class={labelCls}><span class={numCls}>22</span>Código CIE-10 / CPT</label>
+                <div class="flex gap-2">
+                  <input id="sim-cie" name="sim-cie" class={inputCls} placeholder="Z3591 · 59401.06" />
+                  <button
+                    id="sim-buscar-codigo"
+                    type="button"
+                    class="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-brand-500/50 px-3 py-2 text-xs font-bold text-brand-700 transition-colors hover:bg-brand-500/10 dark:text-brand-300"
+                  >
+                    <Icon name="search" class="size-3.5" />
+                    Catálogo
+                  </button>
+                </div>
+                <p class={helpCls}>Busque en el CIE-10 MINSA o CPMS oficial y cárguelo directamente.</p>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+
+        <aside class="space-y-5 lg:sticky lg:top-24 lg:self-start">
+          <div id="sim-verdict" class="rounded-2xl border border-slate-300 bg-slate-100 px-5 py-4 text-sm font-semibold text-slate-600 dark:border-night-600 dark:bg-night-800 dark:text-slate-300">
+            Complete la hoja para obtener el veredicto del control de calidad.
+          </div>
+          <p id="sim-counts" class="text-xs font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400"></p>
+          <ul id="sim-results" class="space-y-2.5" aria-live="polite"></ul>
+          <p class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-[11px] leading-relaxed text-slate-500 dark:border-night-700 dark:bg-night-800 dark:text-slate-400">
+            Las reglas aplicadas provienen de {site.sourceDocument} y se mantienen en
+            <code class="font-mono">src/data/content.ts</code> y <code class="font-mono">src/scripts/simulador.ts</code>.
+            Este simulador es una herramienta de estudio y no reemplaza al sistema HIS MINSA.
+          </p>
+        </aside>
+      </div>
+
+      <div class="mt-12">
+        <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">Vista previa de la Hoja HIS</h2>
+        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          Así quedarían consignados los casilleros 1 a 22 con los datos ingresados.
+        </p>
+        <div
+          id="sim-preview"
+          class="mt-5 rounded-3xl border border-slate-200 bg-slate-50 p-5 dark:border-night-700 dark:bg-night-800"
+        ></div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <dialog
+    id="sim-code-dialog"
+    class="m-auto w-auto max-w-[min(94vw,640px)] rounded-3xl border border-slate-200 bg-white p-6 backdrop:bg-night-950/80 backdrop:backdrop-blur-sm dark:border-night-600 dark:bg-night-900"
+  >
+    <div class="flex items-center justify-between gap-4">
+      <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">Buscar código oficial (ítem 22)</h2>
+      <button
+        id="sim-code-close"
+        type="button"
+        class="grid size-9 shrink-0 place-items-center rounded-xl border border-slate-200 text-slate-500 hover:text-brand-600 dark:border-night-600 dark:text-slate-300"
+        aria-label="Cerrar buscador de códigos"
+      >
+        <Icon name="close" class="size-4" />
+      </button>
+    </div>
+    <input
+      id="sim-code-q"
+      type="search"
+      class="mt-4 w-full rounded-xl border border-slate-200 bg-slate-100/70 px-4 py-2.5 text-sm focus:border-brand-400 focus:bg-white focus:outline-none dark:border-night-600 dark:bg-night-800 dark:text-slate-100"
+      placeholder="hipertensión, dengue, anestesia, 59401…"
+      aria-label="Buscar código CIE-10 o CPMS"
+    />
+    <p id="sim-code-estado" class="mt-2 text-[11px] text-slate-500 dark:text-slate-400"></p>
+    <ul id="sim-code-lista" class="mt-3 max-h-80 space-y-2 overflow-y-auto"></ul>
+  </dialog>
+</Layout>
+
+<script>
+  import { initSimulador } from '../scripts/simulador';
+  initSimulador();
+</script>

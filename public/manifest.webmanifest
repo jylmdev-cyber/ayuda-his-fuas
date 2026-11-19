@@ -1,0 +1,27 @@
+{
+  "name": "HIS MINSA & FUA SIS — Guía y biblioteca de codificación",
+  "short_name": "HIS-FUA",
+  "description": "Guía interactiva del registro HIS MINSA y FUA SIS con catálogos oficiales CIE-10 y CPMS, simulador de llenado, asistente de código prestacional, casos de auditoría y modo estudio.",
+  "lang": "es-PE",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#04090f",
+  "theme_color": "#071019",
+  "categories": ["education", "medical"],
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

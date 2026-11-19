@@ -1,0 +1,32 @@
+# build output
+dist/
+.output/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# local env files
+.env
+.env.*
+
+# astro
+.astro/
+
+# OS
+.DS_Store
+
+# scratch
+.tmp_imgs/
+extracted.txt
+
+# source PDF (kept locally, not published)
+*.pdf
+
+# official catalog sources (re-downloadable via npm run import:catalogos)
+.fuentes/

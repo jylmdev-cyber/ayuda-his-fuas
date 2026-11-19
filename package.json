@@ -1,0 +1,27 @@
+{
+  "name": "astro-his-fuas",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Guía digital interactiva del procedimiento de registro HIS MINSA y FUA SIS (documento técnico 2025)",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "import:catalogos": "node scripts/import-catalogos.mjs",
+    "generar:og": "node scripts/generar-og.mjs",
+    "test": "vitest run",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
+    "astro": "^5.16.0"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "@tailwindcss/vite": "^4.1.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.7.0",
+    "vitest": "^5.1.1",
+    "xlsx": "^0.18.5"
+  }
+}
