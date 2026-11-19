@@ -6,99 +6,158 @@ import { base, nav, searchIndex, site } from '../data/content';
 <header
   class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/80 backdrop-blur-xl dark:border-night-700/70 dark:bg-night-950/80"
 >
-  <nav class="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8" aria-label="Principal">
-    <a href={`${base}`} class="group flex shrink-0 items-center gap-2.5" aria-label="Inicio">
-      <span
-        class="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 text-white shadow-lg shadow-brand-500/25 transition-transform group-hover:scale-105"
-      >
-        <Icon name="stethoscope" class="size-5" />
-      </span>
-      <span class="hidden flex-col leading-tight sm:flex">
-        <span class="font-display text-sm font-bold text-slate-900 dark:text-white">{site.title}</span>
-        <span class="text-[11px] text-slate-500 dark:text-slate-400">Guía de llenado · {site.year}</span>
-      </span>
-    </a>
+  <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Principal">
+    <div class="flex h-16 items-center gap-3">
+      <a href={`${base}`} class="group flex shrink-0 items-center gap-2.5" aria-label="Inicio">
+        <span
+          class="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 text-white shadow-lg shadow-brand-500/25 transition-transform group-hover:scale-105"
+        >
+          <Icon name="stethoscope" class="size-5" />
+        </span>
+        <span class="hidden flex-col leading-tight 2xl:flex">
+          <span class="font-display text-sm font-bold text-slate-900 dark:text-white">{site.title}</span>
+          <span class="text-[11px] text-slate-500 dark:text-slate-400">Guía de llenado · {site.year}</span>
+        </span>
+      </a>
 
-    <ul class="hidden items-center gap-1 lg:flex">
+      <div class="ml-auto flex items-center gap-2">
+        <div class="relative hidden md:block" id="global-search">
+          <Icon name="search" class="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
+          <input
+            id="search-input"
+            type="search"
+            autocomplete="off"
+            placeholder="Buscar ítems, códigos, FUA…"
+            class="w-44 rounded-xl border border-slate-200 bg-slate-100/70 py-2 pr-3 pl-9 text-sm text-slate-700 transition-all placeholder:text-slate-400 focus:w-64 focus:border-brand-400 focus:bg-white focus:outline-none xl:w-56 xl:focus:w-72 2xl:w-64 dark:border-night-600 dark:bg-night-800/70 dark:text-slate-200 dark:focus:bg-night-800"
+            aria-label="Buscador global del contenido"
+          />
+          <div
+            id="search-results"
+            class="absolute top-full right-0 left-0 z-50 mt-2 hidden max-h-96 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/10 dark:border-night-600 dark:bg-night-800"
+            role="listbox"
+          ></div>
+        </div>
+
+        <a
+          href={`${base}catalogos/`}
+          class="hidden items-center gap-2 whitespace-nowrap rounded-xl bg-gradient-to-r from-brand-600 to-accent-500 px-4 py-2 text-xs font-bold text-white shadow-md shadow-brand-500/25 transition-transform hover:-translate-y-0.5 md:inline-flex lg:hidden 2xl:inline-flex"
+        >
+          <Icon name="book" class="size-3.5" />
+          Catálogos
+        </a>
+        <a
+          href={`${base}simulador/`}
+          class="hidden items-center gap-2 whitespace-nowrap rounded-xl border border-brand-500/50 px-4 py-2 text-xs font-bold text-brand-700 transition-colors hover:bg-brand-500/10 md:inline-flex lg:hidden 2xl:inline-flex dark:text-brand-300"
+        >
+          <Icon name="target" class="size-3.5" />
+          Simulador
+        </a>
+        <a
+          href={`${base}asistente/`}
+          class="hidden items-center gap-2 whitespace-nowrap rounded-xl border border-brand-500/50 px-4 py-2 text-xs font-bold text-brand-700 transition-colors hover:bg-brand-500/10 2xl:inline-flex dark:text-brand-300"
+        >
+          <Icon name="gauge" class="size-3.5" />
+          Asistente
+        </a>
+        <a
+          href={`${base}estudio/`}
+          class="hidden items-center gap-2 whitespace-nowrap rounded-xl border border-accent-500/50 px-4 py-2 text-xs font-bold text-accent-600 transition-colors hover:bg-accent-500/10 2xl:inline-flex dark:text-accent-300"
+        >
+          <Icon name="book" class="size-3.5" />
+          Estudio
+        </a>
+
+        <details id="mas-menu" class="relative hidden lg:block">
+          <summary
+            class="flex cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 list-none transition-colors hover:border-brand-400 hover:text-brand-700 [&::-webkit-details-marker]:hidden dark:border-night-600 dark:text-slate-200 dark:hover:text-brand-300"
+          >
+            Practicar
+            <Icon name="chevron" class="size-3.5" />
+          </summary>
+          <div
+            class="absolute right-0 z-50 mt-2 w-60 rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-slate-900/10 dark:border-night-600 dark:bg-night-800"
+          >
+            <a
+              href={`${base}catalogos/`}
+              class="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-brand-500/10 hover:text-brand-700 2xl:hidden dark:text-slate-200 dark:hover:text-brand-300"
+            >
+              <Icon name="book" class="size-4 text-brand-500" />
+              Biblioteca de catálogos
+            </a>
+            <a
+              href={`${base}simulador/`}
+              class="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-brand-500/10 hover:text-brand-700 2xl:hidden dark:text-slate-200 dark:hover:text-brand-300"
+            >
+              <Icon name="target" class="size-4 text-brand-500" />
+              Simulador de llenado
+            </a>
+            <a
+              href={`${base}asistente/`}
+              class="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-brand-500/10 hover:text-brand-700 2xl:hidden dark:text-slate-200 dark:hover:text-brand-300"
+            >
+              <Icon name="gauge" class="size-4 text-brand-500" />
+              Asistente prestacional
+            </a>
+            <a
+              href={`${base}estudio/`}
+              class="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-brand-500/10 hover:text-brand-700 2xl:hidden dark:text-slate-200 dark:hover:text-brand-300"
+            >
+              <Icon name="book" class="size-4 text-accent-500" />
+              Modo estudio
+            </a>
+            <a
+              href={`${base}casos/`}
+              class="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-rose-500/10 hover:text-rose-600 dark:text-slate-200 dark:hover:text-rose-300"
+            >
+              <Icon name="alert" class="size-4 text-rose-500" />
+              Casos de auditoría
+            </a>
+            <a
+              href={`${base}glosario/`}
+              class="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-brand-500/10 hover:text-brand-700 dark:text-slate-200 dark:hover:text-brand-300"
+            >
+              <Icon name="book" class="size-4 text-slate-400" />
+              Glosario
+            </a>
+          </div>
+        </details>
+
+        <button
+          id="theme-toggle"
+          type="button"
+          class="grid size-9 shrink-0 place-items-center rounded-xl border border-slate-200 text-slate-600 transition-colors hover:border-brand-400 hover:text-brand-600 dark:border-night-600 dark:text-slate-300 dark:hover:text-brand-300"
+          aria-label="Cambiar tema claro / oscuro"
+        >
+          <Icon name="sun" class="size-4.5 hidden dark:block" />
+          <Icon name="moon" class="size-4.5 dark:hidden" />
+        </button>
+
+        <button
+          id="menu-toggle"
+          type="button"
+          class="grid size-9 shrink-0 place-items-center rounded-xl border border-slate-200 text-slate-600 lg:hidden dark:border-night-600 dark:text-slate-300"
+          aria-label="Abrir menú de navegación"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <Icon name="menu" class="size-5" />
+        </button>
+      </div>
+    </div>
+
+    <ul class="-mx-2 hidden items-center gap-0.5 overflow-x-auto pb-2 lg:flex">
       {nav.map((entry) => (
-        <li>
+        <li class="shrink-0">
           <a
             href={`#${entry.id}`}
             data-navlink={entry.id}
-            class="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-brand-500/10 hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-300"
+            class="whitespace-nowrap rounded-lg px-2.5 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-brand-500/10 hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-300"
           >
             {entry.label}
           </a>
         </li>
       ))}
     </ul>
-
-    <div class="relative ml-auto hidden md:block" id="global-search">
-      <Icon name="search" class="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
-      <input
-        id="search-input"
-        type="search"
-        autocomplete="off"
-        placeholder="Buscar ítems, códigos, campos del FUA…"
-        class="w-64 rounded-xl border border-slate-200 bg-slate-100/70 py-2 pr-3 pl-9 text-sm text-slate-700 transition-all placeholder:text-slate-400 focus:w-80 focus:border-brand-400 focus:bg-white focus:outline-none xl:w-80 xl:focus:w-96 dark:border-night-600 dark:bg-night-800/70 dark:text-slate-200 dark:focus:bg-night-800"
-        aria-label="Buscador global del contenido"
-      />
-      <div
-        id="search-results"
-        class="absolute top-full right-0 left-0 z-50 mt-2 hidden max-h-96 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/10 dark:border-night-600 dark:bg-night-800"
-        role="listbox"
-      ></div>
-    </div>
-
-    <a
-      href={`${base}catalogos/`}
-      class="hidden items-center gap-2 rounded-xl bg-gradient-to-r from-brand-600 to-accent-500 px-4 py-2 text-xs font-bold text-white shadow-md shadow-brand-500/25 transition-transform hover:-translate-y-0.5 md:inline-flex"
-    >
-      <Icon name="book" class="size-3.5" />
-      Catálogos
-    </a>
-    <a
-      href={`${base}simulador/`}
-      class="hidden items-center gap-2 rounded-xl border border-brand-500/50 px-4 py-2 text-xs font-bold text-brand-700 transition-colors hover:bg-brand-500/10 md:inline-flex dark:text-brand-300"
-    >
-      <Icon name="target" class="size-3.5" />
-      Simulador
-    </a>
-    <a
-      href={`${base}asistente/`}
-      class="hidden items-center gap-2 rounded-xl border border-brand-500/50 px-4 py-2 text-xs font-bold text-brand-700 transition-colors hover:bg-brand-500/10 xl:inline-flex dark:text-brand-300"
-    >
-      <Icon name="gauge" class="size-3.5" />
-      Asistente
-    </a>
-    <a
-      href={`${base}estudio/`}
-      class="hidden items-center gap-2 rounded-xl border border-accent-500/50 px-4 py-2 text-xs font-bold text-accent-600 transition-colors hover:bg-accent-500/10 xl:inline-flex dark:text-accent-300"
-    >
-      <Icon name="book" class="size-3.5" />
-      Estudio
-    </a>
-
-    <button
-      id="theme-toggle"
-      type="button"
-      class="ml-auto grid size-9 shrink-0 place-items-center rounded-xl border border-slate-200 text-slate-600 transition-colors hover:border-brand-400 hover:text-brand-600 md:ml-0 dark:border-night-600 dark:text-slate-300 dark:hover:text-brand-300"
-      aria-label="Cambiar tema claro / oscuro"
-    >
-      <Icon name="sun" class="size-4.5 hidden dark:block" />
-      <Icon name="moon" class="size-4.5 dark:hidden" />
-    </button>
-
-    <button
-      id="menu-toggle"
-      type="button"
-      class="grid size-9 shrink-0 place-items-center rounded-xl border border-slate-200 text-slate-600 lg:hidden dark:border-night-600 dark:text-slate-300"
-      aria-label="Abrir menú de navegación"
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-    >
-      <Icon name="menu" class="size-5" />
-    </button>
   </nav>
 
   <div
@@ -119,42 +178,42 @@ import { base, nav, searchIndex, site } from '../data/content';
     </ul>
     <a
       href={`${base}catalogos/`}
-      class="mt-2 flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-600 to-accent-500 px-4 py-2.5 text-sm font-bold text-white lg:hidden"
+      class="mt-2 flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-600 to-accent-500 px-4 py-2.5 text-sm font-bold text-white"
     >
       <Icon name="book" class="size-4" />
       Biblioteca de catálogos
     </a>
     <a
       href={`${base}simulador/`}
-      class="mt-2 flex items-center gap-2 rounded-xl border border-brand-500/50 px-4 py-2.5 text-sm font-bold text-brand-700 lg:hidden dark:text-brand-300"
+      class="mt-2 flex items-center gap-2 rounded-xl border border-brand-500/50 px-4 py-2.5 text-sm font-bold text-brand-700 dark:text-brand-300"
     >
       <Icon name="target" class="size-4" />
       Simulador de llenado
     </a>
     <a
       href={`${base}asistente/`}
-      class="mt-2 flex items-center gap-2 rounded-xl border border-brand-500/50 px-4 py-2.5 text-sm font-bold text-brand-700 lg:hidden dark:text-brand-300"
+      class="mt-2 flex items-center gap-2 rounded-xl border border-brand-500/50 px-4 py-2.5 text-sm font-bold text-brand-700 dark:text-brand-300"
     >
       <Icon name="gauge" class="size-4" />
       Asistente de código prestacional
     </a>
     <a
       href={`${base}estudio/`}
-      class="mt-2 flex items-center gap-2 rounded-xl border border-accent-500/50 px-4 py-2.5 text-sm font-bold text-accent-600 lg:hidden dark:text-accent-300"
+      class="mt-2 flex items-center gap-2 rounded-xl border border-accent-500/50 px-4 py-2.5 text-sm font-bold text-accent-600 dark:text-accent-300"
     >
       <Icon name="book" class="size-4" />
       Modo estudio
     </a>
     <a
       href={`${base}casos/`}
-      class="mt-2 flex items-center gap-2 rounded-xl border border-rose-500/50 px-4 py-2.5 text-sm font-bold text-rose-600 lg:hidden dark:text-rose-300"
+      class="mt-2 flex items-center gap-2 rounded-xl border border-rose-500/50 px-4 py-2.5 text-sm font-bold text-rose-600 dark:text-rose-300"
     >
       <Icon name="alert" class="size-4" />
       Casos de auditoría
     </a>
     <a
       href={`${base}glosario/`}
-      class="mt-2 flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-bold text-slate-700 lg:hidden dark:border-night-600 dark:text-slate-200"
+      class="mt-2 flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-bold text-slate-700 dark:border-night-600 dark:text-slate-200"
     >
       <Icon name="book" class="size-4" />
       Glosario
@@ -181,10 +240,16 @@ import { base, nav, searchIndex, site } from '../data/content';
     if (event.target.closest('a')) mobileMenu.classList.add('hidden');
   });
 
+  const masMenu = document.getElementById('mas-menu');
+  document.addEventListener('click', (event) => {
+    if (masMenu && !masMenu.contains(event.target)) masMenu.removeAttribute('open');
+  });
+  masMenu?.addEventListener('click', (event) => {
+    if (event.target.closest('a')) masMenu.removeAttribute('open');
+  });
+
   const links = Array.from(document.querySelectorAll('[data-navlink]'));
-  const sections = links
-    .map((link) => document.getElementById(link.dataset.navlink ?? ''))
-    .filter((el) => el !== null);
+  const sections = links.map((link) => document.getElementById(link.dataset.navlink ?? '')).filter((el) => el !== null);
 
   const spy = new IntersectionObserver(
     (entries) => {

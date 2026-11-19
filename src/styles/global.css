@@ -28,6 +28,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* El header mide 64px (<lg) y ~104px (lg+): los anclas deben compensarlo */
+[id] {
+  scroll-margin-top: 7rem;
+}
+
 body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
