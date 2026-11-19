@@ -56,7 +56,7 @@ export const site = {
     'Guía digital del procedimiento para el registro de actividades de salud del HIS MINSA y del Formato Único de Atención (FUA) del Seguro Integral de Salud: ítems 1-22 de la Hoja HIS, códigos de financiador y etnia, campos del FUA, códigos por curso de vida 301-306 y auditoría SIS 2025.',
   org: 'Oficina General de Tecnologías de la Información – Ministerio de Salud del Perú',
   year: '2025',
-  repoUrl: 'https://github.com/jylmdev-cyber/astro-his-fuas',
+  repoUrl: 'https://github.com/jylmdev-cyber/ayuda-his-fuas',
   sourceDocument: 'MATERIAL DE ESTUDIO - LLENADO DE HIS Y FUA conv.pdf',
   bvsUrl: 'https://bvs.minsa.gob.pe/manuales-del-sistema-de-informacion-his/',
   locale: 'es_PE',

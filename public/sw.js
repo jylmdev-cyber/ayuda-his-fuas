@@ -2,7 +2,7 @@
  * Estrategia: stale-while-revalidate para todo recurso same-origin.
  * Tras la primera visita, páginas, estilos, imágenes y los JSON de los
  * catálogos quedan disponibles sin conexión. */
-const VERSION = 'his-fua-v2';
+const VERSION = 'his-fua-v3';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './favicon.svg'];
 
 self.addEventListener('install', (event) => {

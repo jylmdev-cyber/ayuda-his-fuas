@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jylmdev-cyber.github.io/astro-his-fuas/sitemap-index.xml
+Sitemap: https://jylmdev-cyber.github.io/ayuda-his-fuas/sitemap-index.xml

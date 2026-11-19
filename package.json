@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "import:catalogos": "node scripts/import-catalogos.mjs",
     "generar:og": "node scripts/generar-og.mjs",
+    "capturas": "node scripts/capturas.mjs",
     "test": "vitest run",
     "astro": "astro"
   },
@@ -19,6 +20,7 @@
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/vite": "^4.1.0",
+    "playwright": "^1.65.1",
     "tailwindcss": "^4.1.0",
     "typescript": "^5.7.0",
     "vitest": "^5.1.1",

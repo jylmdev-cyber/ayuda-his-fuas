@@ -43,7 +43,7 @@ const svg = `
   <text x="84" y="430" font-family="Arial" font-size="38" fill="#5eead4">Biblioteca de Codificación Sanitaria</text>
   <text x="84" y="486" font-family="Arial" font-size="28" fill="#94a3b8">CIE-10 · CPMS · Hoja HIS · FUA · Guía interactiva de estudio</text>
   <rect x="84" y="530" width="420" height="6" rx="3" fill="url(#barra)"/>
-  <text x="84" y="586" font-family="Arial" font-size="24" fill="#64748b">jylmdev-cyber.github.io/astro-his-fuas</text>
+  <text x="84" y="586" font-family="Arial" font-size="24" fill="#64748b">jylmdev-cyber.github.io/ayuda-his-fuas</text>
 </svg>`;
 
 const resvg = new Resvg(svg, {
